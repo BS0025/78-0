@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>78-0</title>
+<style>
+:root{--bg:#07101f;--panel:#101a33;--panel2:#0c1428;--line:#243255;--gold:#ffd24a;--text:#f4f7ff;--muted:#aab5d6;--good:#69f0ae}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(180deg,#07101f,#0b1630 60%,#07101f);color:var(--text);overflow-x:hidden}
+.wrap{max-width:1100px;margin:0 auto;padding:20px;position:relative;z-index:1}
+h1{margin:0 0 8px;font-size:64px;letter-spacing:.08em;text-align:center;font-weight:900}
+.recordTitle{font-size:76px;letter-spacing:.08em;font-weight:900;text-align:center;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.card{background:rgba(16,26,51,.95);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);position:relative;overflow:hidden}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}
+.primary{background:var(--gold);color:#111}
+.secondary{background:#15213d;color:var(--text);border:1px solid var(--line)}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#1b2745;color:var(--muted);margin:4px 6px 0 0;font-size:13px}
+.small{color:var(--muted);font-size:14px}
+.hidden{display:none}
+.list button{width:100%;text-align:left;margin:6px 0;background:#15213d;color:var(--text);border:1px solid var(--line)}
+.table{width:100%;border-collapse:collapse;margin-top:10px}
+.table td,.table th{border-bottom:1px solid #223055;padding:8px 6px;text-align:left;font-size:14px}
+.slotWrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.slot{background:#0b1325;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;overflow:hidden;position:relative}
+.slotLabel{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.reel{height:64px;display:flex;justify-content:center;align-items:center;font-size:30px;font-weight:900;line-height:1;border-radius:10px;background:linear-gradient(180deg,#15213d,#101a33);position:relative;transform:translateZ(0)}
+.reel.spinning{animation:reelPulse .18s linear infinite, reelGlow .5s ease-in-out infinite alternate}
+.reel.spinning::after{content:'';position:absolute;inset:-2px;border-radius:12px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:sheen .8s linear infinite;pointer-events:none}
+.flash{margin-top:12px;color:#fff}
+.spinCard{position:relative}
+.spinCard.shake{animation:shake .55s cubic-bezier(.36,.07,.19,.97) both}
+.pickPulse{animation:pickPulse .55s ease both}
+.finalOverlay{position:fixed;inset:0;background:rgba(4,9,22,.92);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:20;opacity:0;pointer-events:none;transition:opacity .7s ease}
+.finalOverlay.show{opacity:1;pointer-events:auto}
+.finalPanel{width:min(1000px,92vw);background:linear-gradient(180deg,rgba(16,26,51,.98),rgba(10,18,38,.98));border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.finalPanel::before{content:'';position:absolute;inset:-30%;background:radial-gradient(circle at top,rgba(255,210,74,.14),transparent 50%);pointer-events:none}
+.confettiLayer{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .8s ease}
+.confettiLayer.show{opacity:1}
+.confetti{position:absolute;top:-12px;width:10px;height:18px;border-radius:2px;animation:fall linear forwards;will-change:transform,opacity}
+.finalTop{font-size:18px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:center}
+.finalRecordBig{font-size:84px;line-height:1.02;text-align:center;margin:4px 0 16px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 0 16px rgba(255,210,74,.14)}
+.finalCardGrid{display:grid;grid-template-columns:1fr;gap:14px}
+.respinBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.respinBtn{display:inline-flex;align-items:center;gap:8px}
+.respinBtn[disabled]{opacity:.55;cursor:not-allowed}
+@media (max-width:900px){.grid{grid-template-columns:1fr}.slotWrap{grid-template-columns:1fr}.finalRecordBig{font-size:58px}}
+@keyframes shake{10%,90%{transform:translate3d(-1px,0,0)}20%,80%{transform:translate3d(2px,0,0)}30%,50%,70%{transform:translate3d(-4px,0,0)}40%,60%{transform:translate3d(4px,0,0)}}
+@keyframes reelPulse{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.01)}100%{transform:translateY(0) scale(1)}}
+@keyframes reelGlow{from{filter:brightness(1)}to{filter:brightness(1.2)}}
+@keyframes sheen{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@keyframes pickPulse{0%{transform:scale(1)}35%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes fall{0%{transform:translate3d(var(--x,0),-20px,0) rotate(0deg);opacity:1}100%{transform:translate3d(calc(var(--x,0) + var(--drift,0px)),110vh,0) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="confettiLayer" id="confettiLayer"></div>
+
+<div class="wrap">
+  <h1 id="topTitle">78-0</h1>
+
+  <div id="startCard" class="card">
+    <div class="row" style="justify-content:center">
+      <button type="button" class="primary" data-action="start">Start Game</button>
+    </div>
+  </div>
+
+  <div id="game" class="grid hidden" style="margin-top:16px">
+    <div class="card spinCard" id="mainCard">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <div class="small">Roster Spot <span id="spotNum">1</span>/4</div>
+          <h2 id="turnTitle" style="margin:6px 0 0">&nbsp;</h2>
+        </div>
+        <div>
+          <button type="button" class="primary" data-action="spin" id="spinBtn">Spin Wheel</button>
+        </div>
+      </div>
+
+      <div id="wheelBox" class="card hidden" style="margin-top:14px;background:var(--panel2)">
+        <div class="slotWrap">
+          <div class="slot">
+            <div class="slotLabel">Season</div>
+            <div id="seasonReel" class="reel">fall</div>
+          </div>
+          <div class="slot">
+            <div class="slotLabel">Year</div>
+            <div id="yearReel" class="reel">2021</div>
+          </div>
+        </div>
+        <div id="spinMsg" class="flash small"></div>
+      </div>
+
+      <div id="poolBox" class="card hidden" style="margin-top:14px;background:var(--panel2)"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0">Draft Board</h2>
+      <div id="drafted" class="small">No players drafted yet.</div>
+      <div id="status" style="margin-top:14px" class="small"></div>
+    </div>
+  </div>
+
+  <div id="revealCard" class="finalOverlay hidden">
+    <div class="finalPanel">
+      <div class="finalTop">Final Record</div>
+      <div id="finalRecord" class="finalRecordBig">78-0</div>
+      <div class="finalCardGrid">
+        <div class="card" style="margin:0;background:rgba(12,20,40,.86)">
+          <table class="table" id="resultTable"></table>
+        </div>
+        <div class="row" style="justify-content:center;margin-top:4px">
+          <button type="button" class="primary" data-action="playAgain">Play Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const roster = [
+    {name:'Marco Zarzano', year:2021, sem:'fall', ovr:89},{name:'Brandon Salita', year:2021, sem:'fall', ovr:99},{name:'Carter Shook', year:2021, sem:'fall', ovr:94},{name:'Dan Egan', year:2021, sem:'fall', ovr:85},{name:'Drew Von Kollmar', year:2021, sem:'fall', ovr:88},{name:'Emonefe Ewubare', year:2021, sem:'fall', ovr:92},{name:'Frank Mallia', year:2021, sem:'fall', ovr:91},{name:'Jason King', year:2021, sem:'fall', ovr:86},{name:'Josh Minion', year:2021, sem:'fall', ovr:87},{name:'Julian Decicci', year:2021, sem:'fall', ovr:83},{name:'Manny Polanco', year:2021, sem:'fall', ovr:86},{name:'Mason Steward', year:2021, sem:'fall', ovr:85},{name:'Ryan Lee', year:2021, sem:'fall', ovr:87},{name:'Ryley Marker', year:2021, sem:'fall', ovr:92},{name:'Zach Berkley', year:2021, sem:'fall', ovr:89},
+    {name:'JD Calderone', year:2022, sem:'spring', ovr:82},{name:'Abe Factor', year:2022, sem:'spring', ovr:80},{name:'Gavin Collier', year:2022, sem:'spring', ovr:91},{name:'Levi Smith', year:2022, sem:'spring', ovr:83},{name:'Luc Blancato', year:2022, sem:'spring', ovr:76},{name:'Luca Fimmano', year:2022, sem:'spring', ovr:88},{name:'Mark McMillan', year:2022, sem:'spring', ovr:89},{name:'Michael Logar', year:2022, sem:'spring', ovr:87},
+    {name:'Nestor Iljoski', year:2022, sem:'fall', ovr:89},{name:'Drew Ramirez', year:2022, sem:'fall', ovr:93},{name:'Elijah Suissa', year:2022, sem:'fall', ovr:85},{name:'Mike Brown', year:2022, sem:'fall', ovr:82},{name:'Stephen Sherlock', year:2022, sem:'fall', ovr:79},{name:'Vasan Ilango', year:2022, sem:'fall', ovr:87},{name:'William Naismith', year:2022, sem:'fall', ovr:91},{name:'Xavion Crosby', year:2022, sem:'fall', ovr:91},{name:'Zain Bari', year:2022, sem:'fall', ovr:91},
+    {name:'Dan Price', year:2023, sem:'spring', ovr:90},{name:'Abhinav Dutta', year:2023, sem:'spring', ovr:60},{name:'Benny Branyan', year:2023, sem:'spring', ovr:78},{name:'Tyler Newsome', year:2023, sem:'spring', ovr:82},
+    {name:'Quinn Chryss Connell', year:2023, sem:'fall', ovr:86},{name:'Alex Poulhaus', year:2023, sem:'fall', ovr:87},{name:'Daniel Gittleman', year:2023, sem:'fall', ovr:90},{name:'Ian Carpenter', year:2023, sem:'fall', ovr:80},{name:'Ian Murphy', year:2023, sem:'fall', ovr:78},{name:'Jake Vedova', year:2023, sem:'fall', ovr:81},{name:'James Canty', year:2023, sem:'fall', ovr:90},{name:'Julian Diehl', year:2023, sem:'fall', ovr:89},{name:'Max Feldman', year:2023, sem:'fall', ovr:84},{name:'Mike Townsend', year:2023, sem:'fall', ovr:79},{name:'Owen Gilson', year:2023, sem:'fall', ovr:92},{name:'Reyhaan Yadav', year:2023, sem:'fall', ovr:90},{name:'Xavier Schaffer', year:2023, sem:'fall', ovr:81},
+    {name:'Brian Alvin', year:2024, sem:'spring', ovr:89},{name:'Charlie Frantz', year:2024, sem:'spring', ovr:87},{name:'George Hansen', year:2024, sem:'spring', ovr:74},{name:'Nate Jarrow', year:2024, sem:'spring', ovr:75},{name:'Neel Nag', year:2024, sem:'spring', ovr:75},{name:'Toby Tang', year:2024, sem:'spring', ovr:65},{name:'Zach Marsden', year:2024, sem:'spring', ovr:83},
+    {name:'Connor Byrnes', year:2024, sem:'fall', ovr:92},{name:'Hayden Pollock', year:2024, sem:'fall', ovr:83},{name:'Jaden Gerstein', year:2024, sem:'fall', ovr:75},{name:'Joey Solfanelli', year:2024, sem:'fall', ovr:75},{name:'Lucas Jennis', year:2024, sem:'fall', ovr:85},{name:'Sean Connor', year:2024, sem:'fall', ovr:67},
+    {name:'Simon Olstaad', year:2025, sem:'spring', ovr:70},{name:'Alan Varghase', year:2025, sem:'spring', ovr:82},{name:'Charlie Hess', year:2025, sem:'spring', ovr:77},{name:'David Weyer', year:2025, sem:'spring', ovr:79},{name:'Elliot Jones', year:2025, sem:'spring', ovr:75},{name:'Ryno Boates', year:2025, sem:'spring', ovr:75},{name:'Tyler Robinson', year:2025, sem:'spring', ovr:75},
+    {name:'Luke Ryan', year:2025, sem:'fall', ovr:81},{name:'Arnav Patel', year:2025, sem:'fall', ovr:88},{name:'Coen Gotro', year:2025, sem:'fall', ovr:92},{name:'Connor Burke', year:2025, sem:'fall', ovr:88},{name:'Davin Stultz', year:2025, sem:'fall', ovr:85},{name:'Mateo Arumbula', year:2025, sem:'fall', ovr:77},{name:'Mateo Daniels', year:2025, sem:'fall', ovr:69},{name:'Max Drachler', year:2025, sem:'fall', ovr:84},{name:'Nate Forrest', year:2025, sem:'fall', ovr:80},{name:'Sam Baldwin', year:2025, sem:'fall', ovr:83},{name:'Tyler Smith', year:2025, sem:'fall', ovr:75},
+    {name:'Johnny McCracken', year:2026, sem:'spring', ovr:79},{name:'Kevin Grady', year:2026, sem:'spring', ovr:80},{name:'Armstrong Armstrong', year:2026, sem:'spring', ovr:78},{name:'Chase Kurtz', year:2026, sem:'spring', ovr:62},{name:'David Libertoire', year:2026, sem:'spring', ovr:77},{name:'Lukas Koplakkounpo', year:2026, sem:'spring', ovr:84},{name:'Marcelo Friere', year:2026, sem:'spring', ovr:79}
+  ];
+
+  let step = 0, current = null, picks = [], available = roster.slice(), order = shuffle(['fall','spring','fall','spring']), state = 'idle';
+  let yearRespinUsed = false, seasonRespinUsed = false, respinMode = null;
+  const el = id => document.getElementById(id);
+  const confettiLayer = el('confettiLayer');
+  const seasons = ['fall','spring'];
+  const years = [2021,2022,2023,2024,2025,2026];
+
+  function shuffle(arr){ return arr.map(v => ({v, r: Math.random()})).sort((a,b) => a.r - b.r).map(x => x.v); }
+  function neededSem(){ return order[step]; }
+
+  function grade(o){
+    if(o>=98)return'A+';
+    if(o>=93)return'A';
+    if(o>=90)return'A-';
+    if(o>=87)return'B+';
+    if(o>=83)return'B';
+    if(o>=80)return'B-';
+    if(o>=77)return'C+';
+    if(o>=73)return'C';
+    if(o>=70)return'C-';
+    if(o>=67)return'D+';
+    if(o>=63)return'D';
+    if(o>=60)return'D-';
+    return'F';
+  }
+
+  function record(sum){
+    if(sum >= 360) return '78-0';
+    const losses = Math.ceil((360 - sum) / 2);
+    const wins = 78 - losses;
+    return `${wins}-${losses}`;
+  }
+
+  function updateUI(){
+    el('spotNum').textContent = step + 1;
+    el('status').textContent = `Drafted ${picks.length}/4 picks.`;
+    renderRespinButtons();
+  }
+
+  function startGame(){
+    el('startCard').classList.add('hidden');
+    el('game').classList.remove('hidden');
+    updateUI();
+  }
+
+  function validYearsForSem(sem, excludeYear = null){
+    return [...new Set(
+      available
+        .filter(p => p.sem === sem && p.year !== excludeYear)
+        .map(p => p.year)
+    )].sort((a,b)=>a-b);
+  }
+
+  function validSemsForYear(year, excludeSem = null){
+    return [...new Set(
+      available
+        .filter(p => p.year === year && p.sem !== excludeSem)
+        .map(p => p.sem)
+    )].sort();
+  }
+
+  function getRespinOptions(){
+    const yearOptions = validYearsForSem(current.sem, current.year);
+    const seasonOptions = validSemsForYear(current.year, current.sem)
+      .filter(sem => validYearsForSem(sem).length > 0);
+
+    return { yearOptions, seasonOptions };
+  }
+
+  function spinWheel(){
+    if(state !== 'idle') return;
+    const sem = neededSem();
+    const yearsAvail = validYearsForSem(sem);
+    if(!yearsAvail.length) return;
+    current = { year: yearsAvail[Math.floor(Math.random()*yearsAvail.length)], sem };
+    animateSpin(showPool);
+  }
+
+  function animateSpin(done){
+    state = 'spinning';
+    el('spinBtn').disabled = true;
+    el('wheelBox').classList.remove('hidden');
+    const seasonEl = el('seasonReel');
+    const yearEl = el('yearReel');
+    const msg = el('spinMsg');
+    const duration = 1400 + Math.random()*1300;
+    let start = null;
+    let tick = 0;
+
+    el('mainCard').classList.add('shake');
+    seasonEl.classList.add('spinning');
+    yearEl.classList.add('spinning');
+
+    function frame(ts){
+      if(!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      tick += 1 + Math.floor((1 - eased) * 6);
+
+      if(respinMode === 'season'){
+        seasonEl.textContent = seasons[tick % seasons.length];
+        yearEl.textContent = current.year;
+      } else if(respinMode === 'year'){
+        seasonEl.textContent = current.sem;
+        yearEl.textContent = years[tick % years.length];
+      } else {
+        seasonEl.textContent = seasons[tick % seasons.length];
+        yearEl.textContent = years[tick % years.length];
+      }
+
+      seasonEl.style.transform = `translateY(${Math.sin(ts / 60) * 1.5}px) scale(${1 + progress * .02})`;
+      yearEl.style.transform = `translateY(${Math.cos(ts / 55) * 1.5}px) scale(${1 + progress * .02})`;
+
+      if(progress < 1){
+        requestAnimationFrame(frame);
+      } else {
+        seasonEl.classList.remove('spinning');
+        yearEl.classList.remove('spinning');
+        el('mainCard').classList.remove('shake');
+        seasonEl.style.transform = '';
+        yearEl.style.transform = '';
+        seasonEl.textContent = current.sem;
+        yearEl.textContent = current.year;
+        msg.textContent = `Wheel landed on ${current.sem} ${current.year}`;
+        state = 'selecting';
+        updateUI();
+        done();
+      }
+    }
+
+    msg.textContent = 'Spinning...';
+    requestAnimationFrame(frame);
+  }
+
+  function renderRespinButtons(){
+    const pool = el('poolBox');
+    const shouldShow = !pool.classList.contains('hidden') && state === 'selecting';
+    if(!shouldShow) return;
+
+    const { yearOptions, seasonOptions } = getRespinOptions();
+    const buttons = [];
+    if(!seasonRespinUsed && seasonOptions.length) buttons.push(`<button type="button" class="secondary respinBtn" data-action="respinSeason">↻ Season</button>`);
+    if(!yearRespinUsed && yearOptions.length) buttons.push(`<button type="button" class="secondary respinBtn" data-action="respinYear">↻ Year</button>`);
+
+    const existing = pool.querySelector('.respinBtns');
+    if(existing) existing.remove();
+    if(buttons.length) pool.insertAdjacentHTML('afterbegin', `<div class="respinBtns">${buttons.join('')}</div>`);
+  }
+
+  function renderEligible(){
+    const arr = available.filter(p => p.year === current.year && p.sem === current.sem);
+    el('poolBox').innerHTML = `<div class="pickline"><strong>Eligible players</strong></div><div class="list">${arr.map(p => `<button type="button" data-action="pick" data-player="${p.name}">${p.name}</button>`).join('')}</div>`;
+    el('poolBox').classList.remove('hidden');
+    renderRespinButtons();
+  }
+
+  function showPool(){
+    state = 'selecting';
+    el('poolBox').classList.remove('hidden');
+    renderEligible();
+    el('spinBtn').disabled = true;
+  }
+
+  function applyRespin(target){
+    if(state !== 'selecting' || !current) return;
+
+    const { yearOptions, seasonOptions } = getRespinOptions();
+
+    if(target === 'year'){
+      if(yearRespinUsed || !yearOptions.length) return;
+      yearRespinUsed = true;
+      current.year = yearOptions[Math.floor(Math.random() * yearOptions.length)];
+    }
+
+    if(target === 'season'){
+      if(seasonRespinUsed || !seasonOptions.length) return;
+      seasonRespinUsed = true;
+      current.sem = seasonOptions[Math.floor(Math.random() * seasonOptions.length)];
+    }
+
+    el('poolBox').classList.add('hidden');
+    respinMode = target;
+    animateSpin(() => {
+      respinMode = null;
+      showPool();
+    });
+  }
+
+  function highlightDrafted(){
+    const board = el('drafted');
+    board.classList.remove('pickPulse');
+    void board.offsetWidth;
+    board.classList.add('pickPulse');
+  }
+
+  function pickPlayer(name){
+    if(state !== 'selecting') return;
+    const idx = available.findIndex(x => x.name === name);
+    if(idx < 0) return;
+    const pick = available[idx];
+    picks.push(pick);
+    available.splice(idx, 1);
+    step++;
+    el('drafted').innerHTML = picks.map((p,i) => `<div class="badge">${i+1}. ${p.name} — ${p.year} ${p.sem}</div>`).join(' ');
+    el('wheelBox').classList.add('hidden');
+    el('poolBox').classList.add('hidden');
+    el('spinBtn').disabled = false;
+    state = 'idle';
+    updateUI();
+    highlightDrafted();
+    if(step >= 4) reveal();
+  }
+
+  function fireConfetti(){
+    confettiLayer.innerHTML = '';
+    const colors = ['#ffd24a','#69f0ae','#7ec8ff','#ff7bd1','#ffffff'];
+    for(let i=0;i<140;i++){
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.setProperty('--x', (Math.random()*8 - 4) + 'vw');
+      c.style.setProperty('--drift', (Math.random()*20 - 10) + 'vw');
+      c.style.animationDuration = (2.7 + Math.random()*1.7) + 's';
+      c.style.animationDelay = (Math.random()*0.5) + 's';
+      c.style.opacity = (0.8 + Math.random()*0.2).toFixed(2);
+      confettiLayer.appendChild(c);
+    }
+    confettiLayer.classList.add('show');
+    setTimeout(() => {
+      confettiLayer.classList.remove('show');
+      setTimeout(() => { confettiLayer.innerHTML = ''; }, 900);
+    }, 3500);
+  }
+
+  function reveal(){
+    el('game').classList.add('hidden');
+    el('revealCard').classList.remove('hidden');
+    el('revealCard').classList.add('show');
+    const total = picks.reduce((a,p) => a + p.ovr, 0);
+    const rec = record(total);
+    el('finalRecord').textContent = rec;
+    el('topTitle').textContent = rec;
+    el('resultTable').innerHTML =
+      `<tr><th>#</th><th>Player</th><th>Year</th><th>Class</th><th>Grade</th></tr>` +
+      picks.map((p,i) => `<tr><td>${i+1}</td><td>${p.name}</td><td>${p.year}</td><td>${p.sem}</td><td>${grade(p.ovr)}</td></tr>`).join('');
+    fireConfetti();
+  }
+
+  function playAgain(){
+    step = 0;
+    current = null;
+    picks = [];
+    available = roster.slice();
+    order = shuffle(['fall','spring','fall','spring']);
+    state = 'idle';
+    yearRespinUsed = false;
+    seasonRespinUsed = false;
+    respinMode = null;
+    el('revealCard').classList.remove('show');
+    setTimeout(() => el('revealCard').classList.add('hidden'), 700);
+    el('startCard').classList.remove('hidden');
+    el('game').classList.add('hidden');
+    el('drafted').innerHTML = 'No players drafted yet.';
+    el('status').textContent = '';
+    el('wheelBox').classList.add('hidden');
+    el('poolBox').classList.add('hidden');
+    el('spinBtn').disabled = false;
+    el('topTitle').textContent = '78-0';
+    updateUI();
+  }
+
+  document.body.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-action]');
+    if(!a) return;
+    const act = a.dataset.action;
+    if(act === 'start') startGame();
+    if(act === 'spin') spinWheel();
+    if(act === 'playAgain') playAgain();
+    if(act === 'pick') pickPlayer(a.dataset.player);
+    if(act === 'respinSeason') applyRespin('season');
+    if(act === 'respinYear') applyRespin('year');
+  });
+});
+</script>
+</body>
+</html>
