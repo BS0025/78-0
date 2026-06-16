@@ -167,13 +167,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return'F';
   }
 
-  function record(sum){
-    if(sum >= 370) return '78-0';
-    const diff = 370 - sum;
-    const losses = diff;
-    const wins = 78 - losses;
-    return `${wins}-${losses}`;
-  }
+function record(sum){
+  if(sum >= 370) return '78-0';
+  const diff = 370 - sum;
+  const losses = Math.ceil(diff / 2);
+  const wins = 78 - losses;
+  return `${wins}-${losses}`;
+}
 
   function updateUI(){
     el('spotNum').textContent = step + 1;
