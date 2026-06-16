@@ -287,9 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const { yearOptions, seasonOptions } = getRespinOptions();
     const buttons = [];
-    if(!seasonRespinUsed && seasonOptions.length) buttons.push(`<button type="button" class="secondary respinBtn" data-action="respinSeason">↻ Season</button>`);
-    if(!yearRespinUsed && yearOptions.length) buttons.push(`<button type="button" class="secondary respinBtn" data-action="respinYear">↻ Year</button>`);
-
+    if(!seasonRespinUsed && seasonOptions.length) buttons.push(`<button type="button" class="primary respinBtn" data-action="respinSeason">↻ Season</button>`);
+    if(!yearRespinUsed && yearOptions.length) buttons.push(`<button type="button" class="primary respinBtn" data-action="respinYear">↻ Year</button>`);
+    
     const existing = pool.querySelector('.respinBtns');
     if(existing) existing.remove();
     if(buttons.length) pool.insertAdjacentHTML('afterbegin', `<div class="respinBtns">${buttons.join('')}</div>`);
