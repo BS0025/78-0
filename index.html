@@ -46,6 +46,7 @@ button{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:poin
 .respinBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .respinBtn{display:inline-flex;align-items:center;gap:8px}
 .respinBtn[disabled]{opacity:.55;cursor:not-allowed}
+.saveRow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 @media (max-width:900px){.grid{grid-template-columns:1fr}.slotWrap{grid-template-columns:1fr}.finalRecordBig{font-size:58px}}
 @keyframes shake{10%,90%{transform:translate3d(-1px,0,0)}20%,80%{transform:translate3d(2px,0,0)}30%,50%,70%{transform:translate3d(-4px,0,0)}40%,60%{transform:translate3d(4px,0,0)}}
 @keyframes reelPulse{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.01)}100%{transform:translateY(0) scale(1)}}
@@ -54,6 +55,7 @@ button{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:poin
 @keyframes pickPulse{0%{transform:scale(1)}35%{transform:scale(1.04)}100%{transform:scale(1)}}
 @keyframes fall{0%{transform:translate3d(var(--x,0),-20px,0) rotate(0deg);opacity:1}100%{transform:translate3d(calc(var(--x,0) + var(--drift,0px)),110vh,0) rotate(720deg);opacity:0}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 <div class="confettiLayer" id="confettiLayer"></div>
@@ -104,14 +106,15 @@ button{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:poin
   </div>
 
   <div id="revealCard" class="finalOverlay hidden">
-    <div class="finalPanel">
+    <div class="finalPanel" id="finalCapture">
       <div class="finalTop">Final Record</div>
       <div id="finalRecord" class="finalRecordBig">78-0</div>
       <div class="finalCardGrid">
         <div class="card" style="margin:0;background:rgba(12,20,40,.86)">
           <table class="table" id="resultTable"></table>
         </div>
-        <div class="row" style="justify-content:center;margin-top:4px">
+        <div class="saveRow">
+          <button type="button" class="primary" data-action="saveImage">Save Image</button>
           <button type="button" class="primary" data-action="playAgain">Play Again</button>
         </div>
       </div>
@@ -167,13 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return'F';
   }
 
-function record(sum){
-  if(sum >= 370) return '78-0';
-  const diff = 370 - sum;
-  const losses = Math.ceil(diff / 2);
-  const wins = 78 - losses;
-  return `${wins}-${losses}`;
-}
+  function record(sum){
+    if(sum >= 370) return '78-0';
+    const diff = 370 - sum;
+    const losses = Math.ceil(diff / 2);
+    const wins = 78 - losses;
+    return `${wins}-${losses}`;
+  }
 
   function updateUI(){
     el('spotNum').textContent = step + 1;
@@ -208,7 +211,6 @@ function record(sum){
     const seasonOptions = validSemsForYear(current.year, current.sem)
       .filter(sem => validYearsForSem(sem).length > 0)
       .filter(sem => !(current.year === 2020 && sem === 'spring'));
-
     return { yearOptions, seasonOptions };
   }
 
@@ -421,6 +423,24 @@ function record(sum){
     updateUI();
   }
 
+  function saveImage(){
+    const target = document.querySelector('.finalPanel');
+    if(!target || typeof html2canvas === 'undefined') return;
+    html2canvas(target, {backgroundColor:null, scale:2, useCORS:true}).then(canvas => {
+      canvas.toBlob(blob => {
+        if(!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '78-0-final.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+    });
+  }
+
   document.body.addEventListener('click', (e) => {
     const a = e.target.closest('[data-action]');
     if(!a) return;
@@ -431,6 +451,7 @@ function record(sum){
     if(act === 'pick') pickPlayer(a.dataset.player);
     if(act === 'respinSeason') applyRespin('season');
     if(act === 'respinYear') applyRespin('year');
+    if(act === 'saveImage') saveImage();
   });
 });
 </script>
