@@ -5,55 +5,325 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>78-0</title>
 <style>
-:root{--bg:#07101f;--panel:#101a33;--panel2:#0c1428;--line:#243255;--gold:#ffd24a;--text:#f4f7ff;--muted:#aab5d6;--good:#69f0ae}
+:root{
+  --bg:#07101f;
+  --panel:#101a33;
+  --panel2:#0c1428;
+  --line:#243255;
+  --gold:#ffd24a;
+  --text:#f4f7ff;
+  --muted:#aab5d6;
+  --good:#69f0ae;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(180deg,#07101f,#0b1630 60%,#07101f);color:var(--text);overflow-x:hidden}
-.wrap{max-width:1100px;margin:0 auto;padding:20px;position:relative;z-index:1}
-h1{margin:0 0 8px;font-size:64px;letter-spacing:.08em;text-align:center;font-weight:900}
-.recordTitle{font-size:76px;letter-spacing:.08em;font-weight:900;text-align:center;margin:0 0 14px}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
-.card{background:rgba(16,26,51,.95);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);position:relative;overflow:hidden}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-button{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}
-.primary{background:var(--gold);color:#111}
-.secondary{background:#15213d;color:var(--text);border:1px solid var(--line)}
-.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#1b2745;color:var(--muted);margin:4px 6px 0 0;font-size:13px}
-.small{color:var(--muted);font-size:14px}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(180deg,#07101f,#0b1630 60%,#07101f);
+  color:var(--text);
+  overflow-x:hidden;
+}
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:20px;
+  position:relative;
+  z-index:1;
+}
+h1{
+  margin:0 0 8px;
+  font-size:64px;
+  letter-spacing:.08em;
+  text-align:center;
+  font-weight:900;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:16px;
+}
+.card{
+  background:rgba(16,26,51,.95);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  position:relative;
+  overflow:hidden;
+}
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+}
+button{
+  border:0;
+  border-radius:12px;
+  padding:11px 14px;
+  font-weight:700;
+  cursor:pointer;
+}
+.primary{
+  background:var(--gold);
+  color:#111;
+}
+.secondary{
+  background:#15213d;
+  color:var(--text);
+  border:1px solid var(--line);
+}
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#1b2745;
+  color:var(--muted);
+  margin:4px 6px 0 0;
+  font-size:13px;
+}
+.small{
+  color:var(--muted);
+  font-size:14px;
+}
 .hidden{display:none}
-.list button{width:100%;text-align:left;margin:6px 0;background:#15213d;color:var(--text);border:1px solid var(--line)}
-.table{width:100%;border-collapse:collapse;margin-top:10px}
-.table td,.table th{border-bottom:1px solid #223055;padding:8px 6px;text-align:left;font-size:14px}
-.slotWrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.slot{background:#0b1325;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;overflow:hidden;position:relative}
-.slotLabel{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
-.reel{height:64px;display:flex;justify-content:center;align-items:center;font-size:30px;font-weight:900;line-height:1;border-radius:10px;background:linear-gradient(180deg,#15213d,#101a33);position:relative;transform:translateZ(0)}
-.reel.spinning{animation:reelPulse .18s linear infinite, reelGlow .5s ease-in-out infinite alternate}
-.reel.spinning::after{content:'';position:absolute;inset:-2px;border-radius:12px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:sheen .8s linear infinite;pointer-events:none}
+.list button{
+  width:100%;
+  text-align:left;
+  margin:6px 0;
+  background:#15213d;
+  color:var(--text);
+  border:1px solid var(--line);
+}
+.table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+.table td,.table th{
+  border-bottom:1px solid #223055;
+  padding:8px 6px;
+  text-align:left;
+  font-size:14px;
+}
+.slotWrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:14px;
+}
+.slot{
+  background:#0b1325;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  text-align:center;
+  overflow:hidden;
+  position:relative;
+}
+.slotLabel{
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.reel{
+  height:64px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:30px;
+  font-weight:900;
+  line-height:1;
+  border-radius:10px;
+  background:linear-gradient(180deg,#15213d,#101a33);
+  position:relative;
+  transform:translateZ(0);
+}
+.reel.spinning{
+  animation:reelPulse .18s linear infinite, reelGlow .5s ease-in-out infinite alternate;
+}
+.reel.spinning::after{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:12px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  animation:sheen .8s linear infinite;
+  pointer-events:none;
+}
 .flash{margin-top:12px;color:#fff}
 .spinCard{position:relative}
 .spinCard.shake{animation:shake .55s cubic-bezier(.36,.07,.19,.97) both}
 .pickPulse{animation:pickPulse .55s ease both}
-.finalOverlay{position:fixed;inset:0;background:rgba(4,9,22,.92);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:20;opacity:0;pointer-events:none;transition:opacity .7s ease}
-.finalOverlay.show{opacity:1;pointer-events:auto}
-.finalPanel{width:min(1000px,92vw);background:linear-gradient(180deg,rgba(16,26,51,.98),rgba(10,18,38,.98));border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden}
-.finalPanel::before{content:'';position:absolute;inset:-30%;background:radial-gradient(circle at top,rgba(255,210,74,.14),transparent 50%);pointer-events:none}
-.confettiLayer{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .8s ease}
+.finalOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(4,9,22,.92);
+  backdrop-filter:blur(2px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .7s ease;
+}
+.finalOverlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+.finalPanel{
+  width:min(460px,92vw);
+  background:linear-gradient(180deg,rgba(16,26,51,.98),rgba(10,18,38,.98));
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;
+  overflow:hidden;
+}
+.finalPanel::before{
+  content:'';
+  position:absolute;
+  inset:-30%;
+  background:radial-gradient(circle at top,rgba(255,210,74,.14),transparent 50%);
+  pointer-events:none;
+}
+.confettiLayer{
+  position:fixed;
+  inset:0;
+  z-index:25;
+  pointer-events:none;
+  overflow:hidden;
+  opacity:0;
+  transition:opacity .8s ease;
+}
 .confettiLayer.show{opacity:1}
-.confetti{position:absolute;top:-12px;width:10px;height:18px;border-radius:2px;animation:fall linear forwards;will-change:transform,opacity}
-.finalTop{font-size:18px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:center}
-.finalRecordBig{font-size:84px;line-height:1.02;text-align:center;margin:4px 0 16px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 0 16px rgba(255,210,74,.14)}
-.finalCardGrid{display:grid;grid-template-columns:1fr;gap:14px}
-.respinBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.respinBtn{display:inline-flex;align-items:center;gap:8px}
-.respinBtn[disabled]{opacity:.55;cursor:not-allowed}
-.saveRow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-@media (max-width:900px){.grid{grid-template-columns:1fr}.slotWrap{grid-template-columns:1fr}.finalRecordBig{font-size:58px}}
-@keyframes shake{10%,90%{transform:translate3d(-1px,0,0)}20%,80%{transform:translate3d(2px,0,0)}30%,50%,70%{transform:translate3d(-4px,0,0)}40%,60%{transform:translate3d(4px,0,0)}}
-@keyframes reelPulse{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.01)}100%{transform:translateY(0) scale(1)}}
-@keyframes reelGlow{from{filter:brightness(1)}to{filter:brightness(1.2)}}
-@keyframes sheen{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-@keyframes pickPulse{0%{transform:scale(1)}35%{transform:scale(1.04)}100%{transform:scale(1)}}
-@keyframes fall{0%{transform:translate3d(var(--x,0),-20px,0) rotate(0deg);opacity:1}100%{transform:translate3d(calc(var(--x,0) + var(--drift,0px)),110vh,0) rotate(720deg);opacity:0}}
+.confetti{
+  position:absolute;
+  top:-12px;
+  width:10px;
+  height:18px;
+  border-radius:2px;
+  animation:fall linear forwards;
+  will-change:transform,opacity;
+}
+.finalTop{
+  font-size:15px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  text-align:center;
+}
+.finalRecordBig{
+  font-size:78px;
+  line-height:1.02;
+  text-align:center;
+  margin:8px 0 12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  color:#fff;
+  text-shadow:0 0 16px rgba(255,210,74,.14);
+}
+.finalSub{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:14px;
+}
+.finalCardGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+.finalPlayers{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.finalPlayer{
+  background:rgba(12,20,40,.9);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px 12px;
+}
+.finalPlayerTop{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+  margin-bottom:4px;
+}
+.finalName{
+  font-weight:800;
+  font-size:15px;
+}
+.finalMeta{
+  font-size:12px;
+  color:var(--muted);
+}
+.finalGrade{
+  font-size:20px;
+  font-weight:900;
+  color:var(--gold);
+}
+.respinBtns{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.respinBtn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.respinBtn[disabled]{
+  opacity:.55;
+  cursor:not-allowed;
+}
+.saveRow{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:2px;
+}
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr}
+  .slotWrap{grid-template-columns:1fr}
+  .finalRecordBig{font-size:56px}
+}
+@keyframes shake{
+  10%,90%{transform:translate3d(-1px,0,0)}
+  20%,80%{transform:translate3d(2px,0,0)}
+  30%,50%,70%{transform:translate3d(-4px,0,0)}
+  40%,60%{transform:translate3d(4px,0,0)}
+}
+@keyframes reelPulse{
+  0%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-1px) scale(1.01)}
+  100%{transform:translateY(0) scale(1)}
+}
+@keyframes reelGlow{
+  from{filter:brightness(1)}
+  to{filter:brightness(1.2)}
+}
+@keyframes sheen{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(100%)}
+}
+@keyframes pickPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.04)}
+  100%{transform:scale(1)}
+}
+@keyframes fall{
+  0%{transform:translate3d(var(--x,0),-20px,0) rotate(0deg);opacity:1}
+  100%{transform:translate3d(calc(var(--x,0) + var(--drift,0px)),110vh,0) rotate(720deg);opacity:0}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -109,10 +379,9 @@ button{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:poin
     <div class="finalPanel" id="finalCapture">
       <div class="finalTop">Final Record</div>
       <div id="finalRecord" class="finalRecordBig">78-0</div>
+      <div class="finalSub">Shareable team card</div>
       <div class="finalCardGrid">
-        <div class="card" style="margin:0;background:rgba(12,20,40,.86)">
-          <table class="table" id="resultTable"></table>
-        </div>
+        <div class="finalPlayers" id="finalPlayers"></div>
         <div class="saveRow">
           <button type="button" class="primary" data-action="saveImage">Save Image</button>
           <button type="button" class="primary" data-action="playAgain">Play Again</button>
@@ -289,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = [];
     if(!seasonRespinUsed && seasonOptions.length) buttons.push(`<button type="button" class="primary respinBtn" data-action="respinSeason">↻ Season</button>`);
     if(!yearRespinUsed && yearOptions.length) buttons.push(`<button type="button" class="primary respinBtn" data-action="respinYear">↻ Year</button>`);
-    
+
     const existing = pool.querySelector('.respinBtns');
     if(existing) existing.remove();
     if(buttons.length) pool.insertAdjacentHTML('afterbegin', `<div class="respinBtns">${buttons.join('')}</div>`);
@@ -394,9 +663,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const rec = record(total);
     el('finalRecord').textContent = rec;
     el('topTitle').textContent = rec;
-    el('resultTable').innerHTML =
-      `<tr><th>#</th><th>Player</th><th>Year</th><th>Class</th><th>Grade</th></tr>` +
-      picks.map((p,i) => `<tr><td>${i+1}</td><td>${p.name}</td><td>${p.year}</td><td>${p.sem}</td><td>${grade(p.ovr)}</td></tr>`).join('');
+
+    el('finalPlayers').innerHTML = picks.map((p,i) => `
+      <div class="finalPlayer">
+        <div class="finalPlayerTop">
+          <div>
+            <div class="finalName">${i+1}. ${p.name}</div>
+            <div class="finalMeta">${p.year} ${p.sem}</div>
+          </div>
+          <div class="finalGrade">${grade(p.ovr)}</div>
+        </div>
+      </div>
+    `).join('');
+
     fireConfetti();
   }
 
