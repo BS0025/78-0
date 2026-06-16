@@ -13,7 +13,6 @@
   --gold:#ffd24a;
   --text:#f4f7ff;
   --muted:#aab5d6;
-  --good:#69f0ae;
 }
 *{box-sizing:border-box}
 body{
@@ -27,8 +26,6 @@ body{
   max-width:1100px;
   margin:0 auto;
   padding:20px;
-  position:relative;
-  z-index:1;
 }
 h1{
   margin:0 0 8px;
@@ -68,20 +65,6 @@ button{
   background:var(--gold);
   color:#111;
 }
-.secondary{
-  background:#15213d;
-  color:var(--text);
-  border:1px solid var(--line);
-}
-.badge{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:999px;
-  background:#1b2745;
-  color:var(--muted);
-  margin:4px 6px 0 0;
-  font-size:13px;
-}
 .small{
   color:var(--muted);
   font-size:14px;
@@ -95,17 +78,6 @@ button{
   color:var(--text);
   border:1px solid var(--line);
 }
-.table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-}
-.table td,.table th{
-  border-bottom:1px solid #223055;
-  padding:8px 6px;
-  text-align:left;
-  font-size:14px;
-}
 .slotWrap{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -118,8 +90,6 @@ button{
   border-radius:14px;
   padding:14px;
   text-align:center;
-  overflow:hidden;
-  position:relative;
 }
 .slotLabel{
   font-size:12px;
@@ -138,30 +108,12 @@ button{
   line-height:1;
   border-radius:10px;
   background:linear-gradient(180deg,#15213d,#101a33);
-  position:relative;
-  transform:translateZ(0);
-}
-.reel.spinning{
-  animation:reelPulse .18s linear infinite, reelGlow .5s ease-in-out infinite alternate;
-}
-.reel.spinning::after{
-  content:'';
-  position:absolute;
-  inset:-2px;
-  border-radius:12px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-  animation:sheen .8s linear infinite;
-  pointer-events:none;
 }
 .flash{margin-top:12px;color:#fff}
-.spinCard{position:relative}
-.spinCard.shake{animation:shake .55s cubic-bezier(.36,.07,.19,.97) both}
-.pickPulse{animation:pickPulse .55s ease both}
 .finalOverlay{
   position:fixed;
   inset:0;
   background:rgba(4,9,22,.92);
-  backdrop-filter:blur(2px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -181,34 +133,6 @@ button{
   border-radius:28px;
   padding:20px;
   box-shadow:0 20px 60px rgba(0,0,0,.5);
-  position:relative;
-  overflow:hidden;
-}
-.finalPanel::before{
-  content:'';
-  position:absolute;
-  inset:-30%;
-  background:radial-gradient(circle at top,rgba(255,210,74,.14),transparent 50%);
-  pointer-events:none;
-}
-.confettiLayer{
-  position:fixed;
-  inset:0;
-  z-index:25;
-  pointer-events:none;
-  overflow:hidden;
-  opacity:0;
-  transition:opacity .8s ease;
-}
-.confettiLayer.show{opacity:1}
-.confetti{
-  position:absolute;
-  top:-12px;
-  width:10px;
-  height:18px;
-  border-radius:2px;
-  animation:fall linear forwards;
-  will-change:transform,opacity;
 }
 .finalTop{
   font-size:15px;
@@ -225,18 +149,12 @@ button{
   font-weight:900;
   letter-spacing:.08em;
   color:#fff;
-  text-shadow:0 0 16px rgba(255,210,74,.14);
 }
 .finalSub{
   text-align:center;
   color:var(--muted);
   font-size:14px;
   margin-bottom:14px;
-}
-.finalCardGrid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
 }
 .finalPlayers{
   display:flex;
@@ -247,14 +165,13 @@ button{
   background:rgba(12,20,40,.9);
   border:1px solid var(--line);
   border-radius:14px;
-  padding:12px 12px;
+  padding:12px;
 }
 .finalPlayerTop{
   display:flex;
   justify-content:space-between;
   gap:8px;
   align-items:center;
-  margin-bottom:4px;
 }
 .finalName{
   font-weight:800;
@@ -269,67 +186,69 @@ button{
   font-weight:900;
   color:var(--gold);
 }
-.respinBtns{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+.bestRun{
   margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(10,18,38,.8);
 }
-.respinBtn{
-  display:inline-flex;
-  align-items:center;
+.bestRunTitle{
+  font-size:13px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.bestRunLine{
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.runSummary{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(10,18,38,.75);
+  border:1px solid var(--line);
+}
+.runSummaryTitle{
+  font-size:13px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.runSummaryList{
+  display:flex;
+  flex-direction:column;
   gap:8px;
 }
-.respinBtn[disabled]{
-  opacity:.55;
-  cursor:not-allowed;
-}
-.saveRow{
+.runSummaryItem{
   display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-top:2px;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  font-size:14px;
+}
+.runSummaryItem span:last-child{
+  color:var(--muted);
+  font-size:12px;
+}
+.draftMeta{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:14px;
 }
 @media (max-width:900px){
   .grid{grid-template-columns:1fr}
   .slotWrap{grid-template-columns:1fr}
   .finalRecordBig{font-size:56px}
 }
-@keyframes shake{
-  10%,90%{transform:translate3d(-1px,0,0)}
-  20%,80%{transform:translate3d(2px,0,0)}
-  30%,50%,70%{transform:translate3d(-4px,0,0)}
-  40%,60%{transform:translate3d(4px,0,0)}
-}
-@keyframes reelPulse{
-  0%{transform:translateY(0) scale(1)}
-  50%{transform:translateY(-1px) scale(1.01)}
-  100%{transform:translateY(0) scale(1)}
-}
-@keyframes reelGlow{
-  from{filter:brightness(1)}
-  to{filter:brightness(1.2)}
-}
-@keyframes sheen{
-  from{transform:translateX(-100%)}
-  to{transform:translateX(100%)}
-}
-@keyframes pickPulse{
-  0%{transform:scale(1)}
-  35%{transform:scale(1.04)}
-  100%{transform:scale(1)}
-}
-@keyframes fall{
-  0%{transform:translate3d(var(--x,0),-20px,0) rotate(0deg);opacity:1}
-  100%{transform:translate3d(calc(var(--x,0) + var(--drift,0px)),110vh,0) rotate(720deg);opacity:0}
-}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
-<div class="confettiLayer" id="confettiLayer"></div>
-
 <div class="wrap">
   <h1 id="topTitle">78-0</h1>
 
@@ -344,7 +263,7 @@ button{
       <div class="row" style="justify-content:space-between">
         <div>
           <div class="small">Roster Spot <span id="spotNum">1</span>/4</div>
-          <h2 id="turnTitle" style="margin:6px 0 0">&nbsp;</h2>
+          <h2 id="turnTitle" style="margin:6px 0 0"></h2>
         </div>
         <div>
           <button type="button" class="primary" data-action="spin" id="spinBtn">Spin Wheel</button>
@@ -366,25 +285,33 @@ button{
       </div>
 
       <div id="poolBox" class="card hidden" style="margin-top:14px;background:var(--panel2)"></div>
+      <div id="draftMeta" class="draftMeta"></div>
     </div>
 
     <div class="card">
-      <h2 style="margin-top:0">Draft Board</h2>
-      <div id="drafted" class="small">No players drafted yet.</div>
-      <div id="status" style="margin-top:14px" class="small"></div>
+      <h2 style="margin-top:0">Run Summary</h2>
+      <div id="runSummary" class="runSummary hidden">
+        <div class="runSummaryTitle">Picks</div>
+        <div id="runSummaryList" class="runSummaryList"></div>
+      </div>
+
+      <div class="bestRun">
+        <div class="bestRunTitle">Best Run</div>
+        <div id="bestRunLine" class="bestRunLine">No runs saved yet.</div>
+        <div id="bestRunDetail" class="small">Your best result will appear here.</div>
+      </div>
     </div>
   </div>
 
   <div id="revealCard" class="finalOverlay hidden">
-    <div class="finalPanel" id="finalCapture">
+    <div class="finalPanel" id="finalPanel">
       <div class="finalTop">Final Record</div>
       <div id="finalRecord" class="finalRecordBig">78-0</div>
-      <div class="finalCardGrid">
-        <div class="finalPlayers" id="finalPlayers"></div>
-        <div class="saveRow">
-          <button type="button" class="primary" data-action="saveImage">Save Image</button>
-          <button type="button" class="primary" data-action="playAgain">Play Again</button>
-        </div>
+      <div class="finalSub" id="finalSub"></div>
+      <div class="finalPlayers" id="finalPlayers"></div>
+      <div class="row" style="justify-content:center;margin-top:14px">
+        <button type="button" class="primary" data-action="saveImage">Save Image</button>
+        <button type="button" class="primary" data-action="playAgain">Play Again</button>
       </div>
     </div>
   </div>
@@ -412,10 +339,11 @@ document.addEventListener('DOMContentLoaded', () => {
     {name:'Johnny McCracken', year:2026, sem:'spring', ovr:79},{name:'Kevin Grady', year:2026, sem:'spring', ovr:80},{name:'Armstrong Armstrong', year:2026, sem:'spring', ovr:78},{name:'Chase Kurtz', year:2026, sem:'spring', ovr:62},{name:'David Libertoire', year:2026, sem:'spring', ovr:77},{name:'Lukas Koplakkounpo', year:2026, sem:'spring', ovr:84},{name:'Marcelo Friere', year:2026, sem:'spring', ovr:79}
   ];
 
+  const bestKey = '78-0-best-run-v1';
   let step = 0, current = null, picks = [], available = roster.slice(), order = shuffle(['fall','spring','fall','spring']), state = 'idle';
   let yearRespinUsed = false, seasonRespinUsed = false, respinMode = null;
+  let runSummary = [];
   const el = id => document.getElementById(id);
-  const confettiLayer = el('confettiLayer');
   const seasons = ['fall','spring'];
   const years = [2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
 
@@ -448,8 +376,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateUI(){
     el('spotNum').textContent = step + 1;
-    el('status').textContent = `Drafted ${picks.length}/4 picks.`;
-    renderRespinButtons();
+    if(el('turnTitle')) el('turnTitle').textContent = current ? `${current.sem} ${current.year}` : '';
+    renderRunSummary();
   }
 
   function startGame(){
@@ -459,19 +387,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function validYearsForSem(sem, excludeYear = null){
-    return [...new Set(
-      available
-        .filter(p => p.sem === sem && p.year !== excludeYear)
-        .map(p => p.year)
-    )].filter(y => !(y === 2020 && sem === 'spring')).sort((a,b)=>a-b);
+    return [...new Set(available.filter(p => p.sem === sem && p.year !== excludeYear).map(p => p.year))]
+      .filter(y => !(y === 2020 && sem === 'spring'))
+      .sort((a,b)=>a-b);
   }
 
   function validSemsForYear(year, excludeSem = null){
-    return [...new Set(
-      available
-        .filter(p => p.year === year && p.sem !== excludeSem)
-        .map(p => p.sem)
-    )].sort();
+    return [...new Set(available.filter(p => p.year === year && p.sem !== excludeSem).map(p => p.sem))].sort();
   }
 
   function getRespinOptions(){
@@ -482,12 +404,53 @@ document.addEventListener('DOMContentLoaded', () => {
     return { yearOptions, seasonOptions };
   }
 
+  function renderRespinButtons(){
+    const pool = el('poolBox');
+    if(!pool || pool.classList.contains('hidden') || state !== 'selecting') return;
+
+    const { yearOptions, seasonOptions } = getRespinOptions();
+    const buttons = [];
+    if(!seasonRespinUsed && seasonOptions.length) buttons.push(`<button type="button" class="primary" data-action="respinSeason">↻ Season</button>`);
+    if(!yearRespinUsed && yearOptions.length) buttons.push(`<button type="button" class="primary" data-action="respinYear">↻ Year</button>`);
+
+    const old = pool.querySelector('.respinBtns');
+    if(old) old.remove();
+    if(buttons.length) pool.insertAdjacentHTML('afterbegin', `<div class="respinBtns" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">${buttons.join('')}</div>`);
+  }
+
+  function renderEligible(){
+    const poolBox = el('poolBox');
+    if(!poolBox || !current) return;
+
+    const arr = available.filter(p => p.year === current.year && p.sem === current.sem);
+    const spots = 4 - picks.length;
+
+    poolBox.innerHTML = `
+      <div class="pickline"><strong>Eligible players</strong></div>
+      <div class="small" style="margin:6px 0 10px;">Pick one for roster spot ${step + 1} of 4.</div>
+      <div class="list">
+        ${arr.map(p => `<button type="button" data-action="pick" data-player="${p.name}">${p.name}</button>`).join('')}
+      </div>
+    `;
+
+    poolBox.classList.remove('hidden');
+    el('draftMeta').textContent = `You need ${Math.max(0, spots - 1)} more pick${spots - 1 === 1 ? '' : 's'} after this one.`;
+    renderRespinButtons();
+  }
+
+  function showPool(){
+    state = 'selecting';
+    renderEligible();
+    const spinBtn = el('spinBtn');
+    if(spinBtn) spinBtn.disabled = true;
+  }
+
   function spinWheel(){
     if(state !== 'idle') return;
     const sem = neededSem();
     const yearsAvail = validYearsForSem(sem);
     if(!yearsAvail.length) return;
-    current = { year: yearsAvail[Math.floor(Math.random()*yearsAvail.length)], sem };
+    current = { year: yearsAvail[Math.floor(Math.random() * yearsAvail.length)], sem };
     if(current.year === 2020 && current.sem === 'spring') current = { year: 2019, sem: 'spring' };
     animateSpin(showPool);
   }
@@ -499,19 +462,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const seasonEl = el('seasonReel');
     const yearEl = el('yearReel');
     const msg = el('spinMsg');
-    const duration = 1400 + Math.random()*1300;
+    const duration = 1900 + Math.random() * 1500;
     let start = null;
     let tick = 0;
-
-    el('mainCard').classList.add('shake');
-    seasonEl.classList.add('spinning');
-    yearEl.classList.add('spinning');
 
     function frame(ts){
       if(!start) start = ts;
       const progress = Math.min((ts - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      tick += 1 + Math.floor((1 - eased) * 6);
+      tick += 1 + Math.floor((1 - progress) * 7);
 
       if(respinMode === 'season'){
         seasonEl.textContent = seasons[tick % seasons.length];
@@ -524,22 +482,13 @@ document.addEventListener('DOMContentLoaded', () => {
         yearEl.textContent = years[tick % years.length];
       }
 
-      seasonEl.style.transform = `translateY(${Math.sin(ts / 60) * 1.5}px) scale(${1 + progress * .02})`;
-      yearEl.style.transform = `translateY(${Math.cos(ts / 55) * 1.5}px) scale(${1 + progress * .02})`;
-
       if(progress < 1){
         requestAnimationFrame(frame);
       } else {
-        seasonEl.classList.remove('spinning');
-        yearEl.classList.remove('spinning');
-        el('mainCard').classList.remove('shake');
-        seasonEl.style.transform = '';
-        yearEl.style.transform = '';
         seasonEl.textContent = current.sem;
         yearEl.textContent = current.year;
         msg.textContent = `Wheel landed on ${current.sem} ${current.year}`;
         state = 'selecting';
-        updateUI();
         done();
       }
     }
@@ -548,57 +497,23 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(frame);
   }
 
-  function renderRespinButtons(){
-    const pool = el('poolBox');
-    const shouldShow = !pool.classList.contains('hidden') && state === 'selecting';
-    if(!shouldShow) return;
-
-    const { yearOptions, seasonOptions } = getRespinOptions();
-    const buttons = [];
-    if(!seasonRespinUsed && seasonOptions.length) buttons.push(`<button type="button" class="primary respinBtn" data-action="respinSeason">↻ Season</button>`);
-    if(!yearRespinUsed && yearOptions.length) buttons.push(`<button type="button" class="primary respinBtn" data-action="respinYear">↻ Year</button>`);
-
-    const existing = pool.querySelector('.respinBtns');
-    if(existing) existing.remove();
-    if(buttons.length) pool.insertAdjacentHTML('afterbegin', `<div class="respinBtns">${buttons.join('')}</div>`);
-  }
-
-  function renderEligible(){
-    const arr = available.filter(p => p.year === current.year && p.sem === current.sem);
-    el('poolBox').innerHTML = `<div class="pickline"><strong>Eligible players</strong></div><div class="list">${arr.map(p => `<button type="button" data-action="pick" data-player="${p.name}">${p.name}</button>`).join('')}</div>`;
-    el('poolBox').classList.remove('hidden');
-    renderRespinButtons();
-  }
-
-  function showPool(){
-    state = 'selecting';
-    el('poolBox').classList.remove('hidden');
-    renderEligible();
-    el('spinBtn').disabled = true;
-  }
-
   function applyRespin(target){
     if(state !== 'selecting' || !current) return;
-
     const { yearOptions, seasonOptions } = getRespinOptions();
-
     if(target === 'year'){
       if(yearRespinUsed || !yearOptions.length) return;
       yearRespinUsed = true;
       current.year = yearOptions[Math.floor(Math.random() * yearOptions.length)];
     }
-
     if(target === 'season'){
       if(seasonRespinUsed || !seasonOptions.length) return;
       seasonRespinUsed = true;
       current.sem = seasonOptions[Math.floor(Math.random() * seasonOptions.length)];
     }
-
     if(current.year === 2020 && current.sem === 'spring'){
       current.year = 2019;
       current.sem = 'spring';
     }
-
     el('poolBox').classList.add('hidden');
     respinMode = target;
     animateSpin(() => {
@@ -607,11 +522,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function renderRunSummary(){
+    const box = el('runSummary');
+    const list = el('runSummaryList');
+    if(!runSummary.length){
+      box.classList.add('hidden');
+      list.innerHTML = '';
+      return;
+    }
+    box.classList.remove('hidden');
+    list.innerHTML = runSummary.map((r, i) => `
+      <div class="runSummaryItem">
+        <div><strong>Pick ${i + 1}:</strong> ${r.name}</div>
+        <span>${r.year} ${r.sem}</span>
+      </div>
+    `).join('');
+  }
+
   function highlightDrafted(){
     const board = el('drafted');
-    board.classList.remove('pickPulse');
-    void board.offsetWidth;
-    board.classList.add('pickPulse');
+    if(!board) return;
+    board.innerHTML = picks.map((p, i) => `<div class="badge">${i + 1}. ${p.name} — ${p.year} ${p.sem}</div>`).join(' ');
   }
 
   function pickPlayer(name){
@@ -620,38 +551,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if(idx < 0) return;
     const pick = available[idx];
     picks.push(pick);
+    runSummary.push(pick);
     available.splice(idx, 1);
     step++;
-    el('drafted').innerHTML = picks.map((p,i) => `<div class="badge">${i+1}. ${p.name} — ${p.year} ${p.sem}</div>`).join(' ');
     el('wheelBox').classList.add('hidden');
     el('poolBox').classList.add('hidden');
     el('spinBtn').disabled = false;
     state = 'idle';
+    current = null;
     updateUI();
     highlightDrafted();
     if(step >= 4) reveal();
   }
 
-  function fireConfetti(){
-    confettiLayer.innerHTML = '';
-    const colors = ['#ffd24a','#69f0ae','#7ec8ff','#ff7bd1','#ffffff'];
-    for(let i=0;i<140;i++){
-      const c = document.createElement('div');
-      c.className = 'confetti';
-      c.style.left = Math.random()*100 + 'vw';
-      c.style.background = colors[Math.floor(Math.random()*colors.length)];
-      c.style.setProperty('--x', (Math.random()*8 - 4) + 'vw');
-      c.style.setProperty('--drift', (Math.random()*20 - 10) + 'vw');
-      c.style.animationDuration = (2.7 + Math.random()*1.7) + 's';
-      c.style.animationDelay = (Math.random()*0.5) + 's';
-      c.style.opacity = (0.8 + Math.random()*0.2).toFixed(2);
-      confettiLayer.appendChild(c);
+  function updateBestRun(total, rec){
+    const stored = JSON.parse(localStorage.getItem(bestKey) || 'null');
+    if(!stored || total > stored.total){
+      localStorage.setItem(bestKey, JSON.stringify({ total, rec, picks, when: new Date().toISOString() }));
     }
-    confettiLayer.classList.add('show');
-    setTimeout(() => {
-      confettiLayer.classList.remove('show');
-      setTimeout(() => { confettiLayer.innerHTML = ''; }, 900);
-    }, 3500);
+  }
+
+  function renderBestRun(){
+    const stored = JSON.parse(localStorage.getItem(bestKey) || 'null');
+    if(!stored){
+      el('bestRunLine').textContent = 'No runs saved yet.';
+      el('bestRunDetail').textContent = 'Your best result will appear here.';
+      return;
+    }
+    el('bestRunLine').textContent = `${stored.rec} — ${stored.total} total`;
+    el('bestRunDetail').textContent = stored.picks.map(p => p.name).join(' • ');
   }
 
   function reveal(){
@@ -661,21 +589,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const total = picks.reduce((a,p) => a + p.ovr, 0);
     const rec = record(total);
     el('finalRecord').textContent = rec;
-    el('topTitle').textContent = rec;
-
+    el('topTitle').textContent = '78-0';
+    el('finalSub').textContent = total >= 370 ? 'Perfect run achieved.' : 'Final roster revealed.';
+    el('finalPanel').style.borderColor = rec === '78-0' ? '#f5d76a' : 'var(--line)';
     el('finalPlayers').innerHTML = picks.map((p,i) => `
       <div class="finalPlayer">
         <div class="finalPlayerTop">
           <div>
-            <div class="finalName">${i+1}. ${p.name}</div>
+            <div class="finalName">${i + 1}. ${p.name}</div>
             <div class="finalMeta">${p.year} ${p.sem}</div>
           </div>
           <div class="finalGrade">${grade(p.ovr)}</div>
         </div>
       </div>
     `).join('');
-
-    fireConfetti();
+    updateBestRun(total, rec);
+    renderBestRun();
   }
 
   function playAgain(){
@@ -688,12 +617,14 @@ document.addEventListener('DOMContentLoaded', () => {
     yearRespinUsed = false;
     seasonRespinUsed = false;
     respinMode = null;
+    runSummary = [];
     el('revealCard').classList.remove('show');
-    setTimeout(() => el('revealCard').classList.add('hidden'), 700);
+    setTimeout(() => el('revealCard').classList.add('hidden'), 300);
     el('startCard').classList.remove('hidden');
     el('game').classList.add('hidden');
     el('drafted').innerHTML = 'No players drafted yet.';
     el('status').textContent = '';
+    el('draftMeta').textContent = '';
     el('wheelBox').classList.add('hidden');
     el('poolBox').classList.add('hidden');
     el('spinBtn').disabled = false;
@@ -702,9 +633,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function saveImage(){
-    const target = document.querySelector('.finalPanel');
+    const target = el('finalPanel');
     if(!target || typeof html2canvas === 'undefined') return;
-    html2canvas(target, {backgroundColor:null, scale:2, useCORS:true}).then(canvas => {
+    html2canvas(target, { backgroundColor:null, scale:2, useCORS:true }).then(canvas => {
       canvas.toBlob(blob => {
         if(!blob) return;
         const url = URL.createObjectURL(blob);
@@ -718,6 +649,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  renderBestRun();
 
   document.body.addEventListener('click', (e) => {
     const a = e.target.closest('[data-action]');
